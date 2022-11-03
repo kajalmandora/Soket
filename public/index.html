@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Box</title>
+</head>
+<body>
+    <h1> My Message</h1>
+
+    <textarea name="mesg" id="msg" placeholder="Enter your message"></textarea>
+    <button class="btn" onclick="sendMessage()">send</button>
+
+    <div id="display"></div>
+
+    <script src="socket.io/socket.io.js"></script>
+
+    <script>
+        const username = prompt("Enter your name");
+        const display = document.getElementById("display");
+        const chatBox = document.getElementById("msg");
+        const socket = io();
+        socket.emit("new user",username);
+        function sendMessage(){
+            let message = chatBox.value;
+            socket.emit("new message",message);
+            if(message)
+                display.innerHTML += ("<br>" + username + ":" + message + "<br>");
+
+            chatBox.value = '';
+        }
+        socket.on('new message', (message)=>{
+            display.innerHTML += ("<br>" + message + "<br>");
+        });
+    </script>
+
+    
+</body>
+</html>
